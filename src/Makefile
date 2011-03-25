@@ -45,6 +45,7 @@ MODULES=yaws \
 	haxe yaws_rpc \
 	yaws_soap_srv yaws_soap_lib \
 	authmod_gssapi \
+	authmod_digest \
 	yaws_appmod_cgi \
 	yaws_appmod_fcgi \
 	yaws_sendfile yaws_sendfile_compat \

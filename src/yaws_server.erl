@@ -1734,6 +1734,7 @@ is_auth(_ARG, _Req_dir, _H, [], {Ret, Auth_headers}) ->
     Ret;
 
 is_auth(ARG, Req_dir, H, [{Auth_dir, Auth_methods}|T], {Ret, Auth_headers}) ->
+    error_logger:error_report(Auth_methods#auth.mod),
     case lists:prefix(Auth_dir, Req_dir) of
 	true ->
 	    Auth_H = H#headers.authorization,
@@ -1744,7 +1745,9 @@ is_auth(ARG, Req_dir, H, [{Auth_dir, Auth_methods}|T], {Ret, Auth_headers}) ->
 		{true, User} ->
 		    {true, User};
 		false ->
-		    L = Auth_methods#auth.headers,
+%		    L = Auth_methods#auth.headers,
+            Mod = Auth_methods#auth.mod,
+            L = Mod:get_header(),
 		    Realm = Auth_methods#auth.realm,
 		    is_auth(ARG, Req_dir, H, T, {{false, Auth_methods, Realm},
 						 L ++ Auth_headers});

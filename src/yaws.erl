@@ -1986,6 +1986,12 @@ parse_auth(Orig = "Basic " ++ Auth64) ->
     end;
 parse_auth(Orig = "Negotiate " ++ _Auth64) ->
     {undefined, undefined, Orig};
+parse_auth(Orig = "Digest " ++ Auth) ->
+    DigestParams =
+        lists:map(fun(T) -> [Name, Value] = string:tokens(T, "="), {Name, string:strip(Value, both, $")} end,
+            string:tokens(Auth, ",")),
+    User = proplists:get_value("username", DigestParams),
+    {User, undefined, Orig};
 parse_auth(_) ->
     undefined.
 
